@@ -1,20 +1,31 @@
-#include "msolver.hpp"
+#include <armadillo>
 #include <iostream>
 #include <cmath>
-#include <armadillo>
-
-using namespace std;
-using namespace arma;
-
-void test(mat A_a){
-  cout << A_a << endl;
-}
+#include "msolver.cpp"
 
 
-int main(int argc, char const *argv[]){
-  int n = 5;
 
-  mat A_a = randu<mat>(n,n);
-  vec b = randu<vec>(n);
-  vec x = solve(A_a,b);
+int main() {
+
+  //Setting up variables
+  int n = 100;
+
+  int a = -1;
+  int b = 2;
+  int c = -1;
+
+  //Making a filename
+  std::string filename = "./N" + std::to_string(n) + ".txt";
+
+
+  matrix_solver test(n);
+  //test.random_vectors();
+  test.specified_vectors(a,b,c);
+  test.forward_solver_general();
+  test.backward_solver();
+
+
+  test.write_file(filename);
+
+  return 0;
 }
