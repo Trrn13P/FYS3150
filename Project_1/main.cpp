@@ -14,18 +14,26 @@ int main() {
 
 std::string filename;
 
-    int i = 0;
-    for(i=0; i< 3;i++){
+    for(int i=0; i< 3;i++){
       matrix_solver run_(n[i]);
       run_.specified_vectors(a,b,c);
       run_.forward_solver_general();
       run_.backward_solver();
 
       //Making a filename
-      filename = "./data/N" + std::to_string(n[i]) + ".txt";
-
+      filename = "./data/genN" + std::to_string(n[i]) + ".txt";
       run_.write_file(filename);
+    }
 
+    for(int i=0; i< 3;i++){
+      matrix_solver run_(n[i]);
+      run_.specified_vectors(a,b,c);
+      run_.forward_solver_specialized();
+      run_.backward_solver();
+
+      //Making a filename
+      filename = "./data/speN" + std::to_string(n[i]) + ".txt";
+      run_.write_file(filename);
     }
 
   return 0;

@@ -6,7 +6,7 @@ class matrix_solver {
     int a, b, c;
     arma::vec a_vec, b_vec, c_vec, g_vec;
     arma::vec b_tilde, c_tilde, g_tilde;
-    arma::vec u_vec, x_vec;
+    arma::vec v_vec, x_vec;
 
     std::string filename;
 
@@ -14,11 +14,11 @@ class matrix_solver {
     void Initialize(int n_){
       //Initialing stepsize, numbers ect.
       n = n_;
-      h = 1./(n+1);
+      h = 1./(n+2);
 
       //Initializing x, u(x), g(x)
       x_vec = arma::linspace(0,1,n+2);
-      u_vec = arma::vec(n+2,arma::fill::zeros);
+      v_vec = arma::vec(n+2,arma::fill::zeros);
 
       g_vec = arma::vec(n,arma::fill::zeros);
 
