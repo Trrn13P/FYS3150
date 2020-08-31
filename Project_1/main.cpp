@@ -3,8 +3,6 @@
 #include <cmath>
 #include "msolver.cpp"
 
-
-
 int main() {
 
   //Setting up variables
