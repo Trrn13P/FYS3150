@@ -28,15 +28,7 @@ std::string filename;
 
       run_.write_file(filename);
 
-      //delete[] run_;
-
     }
-
-
-
-  //matrix_solver test(n);
-  //test.random_vectors();
-
 
   return 0;
 }
