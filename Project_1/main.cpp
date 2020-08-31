@@ -8,24 +8,35 @@
 int main() {
 
   //Setting up variables
-  int n = 100;
+  int n[3] = {10,100,1000};
 
   int a = -1;
   int b = 2;
   int c = -1;
 
-  //Making a filename
-  std::string filename = "./N" + std::to_string(n) + ".txt";
+std::string filename;
+
+    int i = 0;
+    for(i=0; i< 3;i++){
+      matrix_solver run_(n[i]);
+      run_.specified_vectors(a,b,c);
+      run_.forward_solver_general();
+      run_.backward_solver();
+
+      //Making a filename
+      filename = "./data/N" + std::to_string(n[i]) + ".txt";
+
+      run_.write_file(filename);
+
+      //delete[] run_;
+
+    }
 
 
-  matrix_solver test(n);
+
+  //matrix_solver test(n);
   //test.random_vectors();
-  test.specified_vectors(a,b,c);
-  test.forward_solver_general();
-  test.backward_solver();
 
-
-  test.write_file(filename);
 
   return 0;
 }

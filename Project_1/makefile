@@ -5,4 +5,4 @@ compile:
 
 execute:
 	./main.out
-	python3 reader.py
+	#python3 reader.py

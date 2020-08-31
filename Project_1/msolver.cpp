@@ -18,7 +18,7 @@ void matrix_solver::random_vectors(){
 
   void matrix_solver::specified_vectors(int a_,int b_,int c_){
     a = a_; b = b_; c = c_;
-    //Initializing the uniformly randomly generated a,b,c vectors
+    //Initializing the specified vectors
     a_vec = arma::vec(n);
     b_vec = arma::vec(n);
     c_vec = arma::vec(n);
@@ -48,17 +48,12 @@ void matrix_solver::forward_solver_specialized(){
 
 //General backward_solver
 void matrix_solver::backward_solver(){
-  //u_vec(n+1) = g_tilde(n-1);
+  //Setting up the endpoint
   u_vec(n) = g_tilde(n-1)*1./b_tilde(n-1);
-
+  //Solving the backward soloution
   for(int i=2;i<n+1;i++){
     int j = (n-i);
-    //std::cout << j << std::endl;
-
-    //std::cout << (g_tilde(j) - c_tilde(j)*g_tilde(j+1)*1./b_tilde(j+1))*1./b_tilde(j+1) << std::endl;
     u_vec(j+1) = (g_tilde(j) - c_tilde(j) *u_vec(j+2))*1./b_tilde(j);
-    //KAN VAERE FEIL MED INDEXERING AV U HER
-    //std::cout << u_vec(j) << std::endl;
   }
 }
 
@@ -66,10 +61,8 @@ void matrix_solver::backward_solver(){
 void matrix_solver::write_file(std::string filename_){
   filename = filename_;
   std::ofstream outfile (filename);
-  //myfile.open ("./example.txt");
   for(int i=0;i<n+2;i++){
     outfile << x_vec(i) << " " << u_vec(i) << "\n";
   }
   outfile.close();
-
 }

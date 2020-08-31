@@ -1,15 +1,36 @@
+# Project 1, b) General algorithm.
+
+"""
+A tridiagonal matrix is a special form of banded matrix where all the elements
+are zero except for those on and immediately above and below the leading diagonal.
+Develop a general algorithm first which does not assume that we have a matrix
+with the same elements along the diagonal and the non-diagonal elements.
+The algorithm for solving this set of equations is rather simple and requires two steps only,
+a decomposition and forward substitution and finally a backward substitution.
+"""
+
+# Solving the equation: Av = B.
+
+"""
+Your first task is to set up the general algorithm (assuming different values
+for the matrix elements) for solving this set of linear equations.
+Find also the precise number of floating point operations needed to solve the above equations.
+For the general algorithm you need to specify
+the values of the array elements a, b and c by inserting their explicit values.
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 def func(n,C,D,uC,uD):
-
+    # Solves the matrix equation Av=B, including boundaries (u(C) and u(D)).
+    # A is a special case nxn tridiagonal matrix.
 
     x = np.linspace(C,D,n+1)
     h = (C-D)/(n+1)
     f = 100*np.exp(-10*x)
 
-    g = h**2*f
+    B = h**2*f
 
     # Elements in the nxn matrix A (special case):
     a = np.ones(n)*(-1)
@@ -21,22 +42,22 @@ def func(n,C,D,uC,uD):
     v[n]  = uD                # initial condition at x = D.
 
     # Row reduction. First step:
-    b_tilde = np.zeros(n) ; b_tilde[0] = b[0]
-    c_tilde = np.zeros(n) ; c_tilde[0] = c[0]
-    g_tilde = np.zeros(n) ; g_tilde[0] = g[1]
+    y = np.zeros(n) ; y[0] = b[0]
+    z = np.zeros(n) ; z[0] = c[0]
+    g = np.zeros(n) ; g[0] = B[1]
 
     # Forward substitution:
     for i in range(1,n):
-        b_tilde[i] = b_tilde[i-1]*b[i]/a[i-1] - c_tilde[i-1]
-        g_tidle[i] = b_tilde[i-1]*g_tilde[i]/a[i-1] - g[i-1]
-        c_tilde[i] = b_tilde[i-1]*c[i]/a[i-1]
+        y[i] = y[i-1]*b[i]/a[i-1] - z[i-1]
+        g[i] = y[i-1]*B[i]/a[i-1] - g[i-1]
+        z[i] = y[i-1]*c[i]/a[i-1]
 
     # Solving final set of equations:
-    v[n-1] = g[n-1]/b_tilde[n-1]
+    v[n-1] = g[n-1]/y[n-1]
     # Backward substitution:
     for i in range(2,n):
         j = n - i
-        v[j] = (g[j] - c_tilde[j]*v[j+1])/b_tilde[j]
+        v[j] = (g[j] - z[j]*v[j+1])/y[j]
 
     FLOPS = 11*n   # approximatly the number of floating point operations.
 
