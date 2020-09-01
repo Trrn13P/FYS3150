@@ -13,10 +13,11 @@ class matrix_solver {
     //error
     double epsilon, epsilon_max;
 
-    double runtime;
+    long double runtime;
 
     std::string filename;
 
+    clock_t start, finish;
 
     void Initialize(int n_){
       //Initialing stepsize, numbers ect.

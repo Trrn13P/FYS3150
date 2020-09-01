@@ -1,6 +1,7 @@
 #include "msolver.hpp"
 #include <iostream>
 #include <fstream>
+#include "time.h"
 
 //f(x) test function
 double matrix_solver::f(double x){
@@ -38,18 +39,28 @@ void matrix_solver::forward_solver_general(){
   //Setting inital values for the tilde vectors
   b_tilde(0) = b_vec(0); c_tilde(0) = c_vec(0); g_tilde(0) = g_vec(0);
 
+  //Starting clock
+  runtime = 0;
+  start = clock();
+
   //Solving the forward algorythm
   for(int i=1;i<n;i++){
     b_tilde(i) = b_vec(i)*b_tilde(i-1)*1./a_vec(i-1) - c_tilde(i-1);
     c_tilde(i) = c_vec(i)*b_tilde(i-1)*1./a_vec(i-1);
     g_tilde(i) = g_vec(i)*b_tilde(i-1)*1./a_vec(i-1) - g_tilde(i-1);
   }
+  //ending clock and adding to runtime
+  finish = clock();
+  runtime += ( (finish - start)*1./CLOCKS_PER_SEC );
 }
 
 void matrix_solver::forward_solver_specialized(){
   //Setting inital values for the tilde vectors
   b_tilde(0) = b_vec(0); c_tilde(0) = c_vec(0); g_tilde(0) = g_vec(0);
 
+  //Starting clock
+  runtime = 0;
+  start = clock();
   //Solving the forward algorythm
   for(int i=1;i<n;i++){
     c_tilde(i) = b_tilde(i-1);
@@ -57,17 +68,26 @@ void matrix_solver::forward_solver_specialized(){
     g_tilde(i) = -g_vec(i)*b_tilde(i-1)-g_tilde(i-1);
 
   }
+  //ending clock and adding to runtime
+  finish = clock();
+  runtime += ( (finish - start)*1./CLOCKS_PER_SEC );
 }
 
 //General backward_solver
 void matrix_solver::backward_solver(){
   //Setting up the endpoint
   v_vec(n) = g_tilde(n-1)*1./b_tilde(n-1);
+
+  //Starting clock
+  start = clock();
   //Solving the backward soloution
   for(int i=2;i<n+1;i++){
     int j = (n-i);
     v_vec(j+1) = (g_tilde(j) - c_tilde(j) *v_vec(j+2))*1./b_tilde(j);
   }
+  //ending clock and adding to runtime
+  finish = clock();
+  runtime += ( (finish - start)*1./CLOCKS_PER_SEC );
 }
 
 //Writing x,u to outfile
