@@ -19,6 +19,7 @@ std::string filename;
       run_.specified_vectors(a,b,c);
       run_.forward_solver_general();
       run_.backward_solver();
+      run_.error();
 
       //Making a filename
       filename = "./data/genN" + std::to_string(n[i]) + ".txt";
@@ -30,6 +31,8 @@ std::string filename;
       run_.specified_vectors(a,b,c);
       run_.forward_solver_specialized();
       run_.backward_solver();
+      run_.error();
+
 
       //Making a filename
       filename = "./data/speN" + std::to_string(n[i]) + ".txt";

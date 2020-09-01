@@ -1,12 +1,19 @@
 class matrix_solver {
 
   private:
+    //Setting up integers
     int n;
-    long double h;
+    double h;
     int a, b, c;
+    //Setting up vectors
     arma::vec a_vec, b_vec, c_vec, g_vec;
     arma::vec b_tilde, c_tilde, g_tilde;
-    arma::vec v_vec, x_vec;
+    arma::vec v_vec, x_vec, u_vec;
+
+    //error
+    double epsilon, epsilon_max;
+
+    double runtime;
 
     std::string filename;
 
@@ -19,6 +26,7 @@ class matrix_solver {
       //Initializing x, u(x), g(x)
       x_vec = arma::linspace(0,1,n+2);
       v_vec = arma::vec(n+2,arma::fill::zeros);
+      u_vec = arma::vec(n+2,arma::fill::zeros);
 
       g_vec = arma::vec(n,arma::fill::zeros);
 
@@ -26,6 +34,12 @@ class matrix_solver {
       for(int i=0;i<n;i++){
         g_vec(i) = pow(h,2) * f(x_vec(i+1));
       }
+
+      //filling in analytic values for u(x)
+      for(int i=0;i<n+2;i++){
+        u_vec(i) = analytic(x_vec(i));
+      }
+
 
       //setting up the tilde vectors
       b_tilde = arma::vec(n,arma::fill::zeros);
@@ -46,11 +60,18 @@ public:
   void specified_vectors(int a_,int b_,int c_);
 
   double f(double x);
+  double analytic(double x);
+
+  void error();
+
+
   void forward_solver_general();
   void forward_solver_specialized();
   void backward_solver();
 
   void write_file(std::string filename_);
+
+  void write_stats(std::string filename_);
 
 
   //setting up the overload
