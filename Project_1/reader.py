@@ -1,45 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-"""
-def read_file_1(filename):
-    infile = open(filename,"r")
-    infile.readline()
-
-    x = []
-    u = []
-    for line in infile:
-        x.append(eval(line.split()[0]))
-        u.append(eval(line.split()[1]))
-
-    infile.close()
-    n = len(u)
-    FLOPS = 11*(n-2)
-    return x,u, FLOPS
-
-
-
-def figures_1(filenames_,argv):
-    for filename in filenames_:
-        x,u, FLOPS = read_file_1(filename)
-        n = eval(filename.split(".tx")[0][11:])
-        print(filename.split(".tx")[0][11:])
-
-        plt.xlabel("x")
-        plt.ylabel("u")
-
-        plt.plot(x,u,label=r"Numerical solution, $n={:}$ steps".format(n))
-        plt.plot(p,u_A,label="Analytic solution")
-        plt.title(r"Project 1b - $FLOPS={:}$".format(FLOPS))
-        plt.legend() ; plt.grid()
-
-        if argv == "plot":
-            plt.show()
-        if argv == "save":
-            plt.savefig("./figures/1b_{:}.png".format(n))
-        plt.clf()
-
-"""
 def read_file(filename):
     infile = open(filename,"r")
     first_line = infile.readline()
@@ -66,6 +27,10 @@ def read_file(filename):
 
     if first_line[0] == "N":
         N = []; epsilon_max = []; log_10_h = []; cpu_time = [];
+        N.append(eval(first_line.split()[0][2:]))
+        epsilon_max.append(eval(first_line.split()[1][12:]))
+        log_10_h.append(eval(first_line.split()[2][10:]))
+        cpu_time.append(eval(first_line.split()[3][9:]))
         for line in infile:
             N.append(eval(line.split()[0][2:]))
             epsilon_max.append(eval(line.split()[1][12:]))
@@ -81,7 +46,6 @@ filenames_2 = ["./data/gen_stats.txt","./data/spe_stats.txt"]
 
 
 for filename in filenames_1:
-
     x,v,u,FLOPS,N,epsilon_max,epsilon_tot,cpu_time,log_10_h = read_file(filename)
     plt.xlabel("x")
     plt.ylabel("u")
@@ -101,40 +65,22 @@ for filename in filenames_1:
         plt.savefig("./figures/1b_{:}_{:}.png".format(type[0:3],N))
     plt.clf()
 
+for filename in filenames_2:
+    N, epsilon_max, log_10_h, cpu_time = read_file(filename)
+    plt.xlabel(r"$log_{10}(h)$")
+    plt.ylabel(r"$\varepsilon$")
+    plt.plot(log_10_h,epsilon_max)
+    if filename[7:10] == "spe":
+        type = "Special algo"
+    if filename[7:10] == "gen":
+        type = "General algo"
 
+    plt.title("{:}".format(type))
+    plt.grid(); #plt.legend()
 
-#figures("plot")
-"""
-x,u, FLOPS = read_file("./data/speN1000.txt")
-plt.xlabel("x")
-plt.ylabel("u")
-n = 1000
-plt.plot(x,u,label=r"Numerical solution, $n={:}$ steps".format(n))
-plt.plot(p,u_A,label="Analytic solution")
-plt.title(r"Project 1b - $FLOPS={:}$".format(FLOPS))
-plt.legend() ; plt.grid()
-plt.show()
-"""
-
-
-"""
-filename = "./data/gen_stats.txt"
-infile = open(filename, "r")
-
-
-N = []
-epsilon_max = []
-log_10_h = []
-cpu_time = []
-
-for line in infile:
-    N.append(eval(line.split()[0][2:]))
-    epsilon_max.append(eval(line.split()[1][12:]))
-    log_10_h.append(eval(line.split()[2][10:]))
-    cpu_time.append(eval(line.split()[3][9:]))
-
-import matplotlib.pyplot as plt
-print(epsilon_max)
-plt.plot(log_10_h,epsilon_max)
-plt.show()
-"""
+    argv = "save"
+    if argv == "plot":
+        plt.show()
+    if argv == "save":
+        plt.savefig("./figures/1d_{:}_eps.png".format(type[0:3]))
+    plt.clf()
