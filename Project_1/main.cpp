@@ -29,7 +29,7 @@ void write_stats(std::string filename_,int n_start, int n_end,std::string type_,
     double h = run_.ret_h();
     long double runtime = run_.ret_runtime();
 
-    outfile << "N=" << i<< " epsilon_max= " << epsilon_max<<" log_10(h)"<<log10(h)<<" CPU-time=" << runtime << std::endl;
+    outfile << "N=" << i<< " epsilon_max=" << epsilon_max<<" log_10(h)="<<log10(h)<<" CPU-time=" << runtime << std::endl;
 
     }
     outfile.close();
@@ -73,4 +73,7 @@ std::string filename;
 
   filename = "./data/spe_stats.txt";
   write_stats(filename,1,7,"specialized", a, b, c);
+
+  filename = "./data/gen_stats.txt";
+  write_stats(filename,1,7,"general", a, b, c);
 }

@@ -1,0 +1,7 @@
+N=1 epsilon_max=-0.667001 log_10(h)=-1.07918 CPU-time=6e-06
+N=2 epsilon_max=-1.69224 log_10(h)=-2.0086 CPU-time=1.1e-05
+N=3 epsilon_max=-2.69825 log_10(h)=-3.00087 CPU-time=0.00012
+N=4 epsilon_max=-3.6989 log_10(h)=-4.00009 CPU-time=0.000764
+N=5 epsilon_max=-4.69896 log_10(h)=-5.00001 CPU-time=0.013221
+N=6 epsilon_max=-5.69897 log_10(h)=-6 CPU-time=0.078117
+N=7 epsilon_max=-6.69899 log_10(h)=-7 CPU-time=0.779812
