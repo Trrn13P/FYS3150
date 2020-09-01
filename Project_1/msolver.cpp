@@ -94,7 +94,7 @@ void matrix_solver::backward_solver(){
 void matrix_solver::write_file(std::string filename_){
   filename = filename_;
   std::ofstream outfile (filename);
-  outfile << "| N=" << n<< " | epsilon_max= " << epsilon_max<<" | epsilon="<<epsilon
+  outfile << "| N=" << n<< " | epsilon_max= " << epsilon_max<<" | epsilon_tot="<<epsilon
   <<" | CPU-time:" << runtime << " | log_10(h)=" << log10(h) << " |\n";
 
   outfile << "| x | v | u |\n ";
@@ -104,14 +104,22 @@ void matrix_solver::write_file(std::string filename_){
   outfile.close();
 }
 
-void matrix_solver::write_stats(std::string filename){
-
-}
-
 void matrix_solver::error(){
   epsilon = 0;
   epsilon_max = log10(abs((1./u_vec(5))*(v_vec(5)-u_vec(5))));
   for(int i=1;i<n+1;i++){
     epsilon += log10(abs((1./u_vec(i))*(v_vec(i)-u_vec(i))));
   }
+}
+
+double matrix_solver::ret_eps_max(){
+  return epsilon_max;
+}
+
+double matrix_solver::ret_h(){
+  return h;
+}
+
+double matrix_solver::ret_runtime(){
+  return runtime;
 }

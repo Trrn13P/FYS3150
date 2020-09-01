@@ -65,6 +65,9 @@ public:
 
   void error();
 
+  double ret_eps_max();
+  double ret_h();
+  double ret_runtime();
 
   void forward_solver_general();
   void forward_solver_specialized();

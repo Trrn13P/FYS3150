@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+"""
 #Analytic solution
 p = np.linspace(0,1,1000)
 u_A = 1 - (1 - np.exp(-10))*p - np.exp(-10*p)
@@ -55,3 +55,4 @@ plt.plot(p,u_A,label="Analytic solution")
 plt.title(r"Project 1b - $FLOPS={:}$".format(FLOPS))
 plt.legend() ; plt.grid()
 plt.show()
+"""
