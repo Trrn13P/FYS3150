@@ -94,7 +94,7 @@ void matrix_solver::backward_solver(){
 void matrix_solver::write_file(std::string filename_){
   filename = filename_;
   std::ofstream outfile (filename);
-  outfile << "| N=" << n<< " | epsilon_max= " << epsilon_max<<" | epsilon_tot="<<epsilon
+  outfile << "| N=" << n<< " | epsilon_max=" << epsilon_max<<" | epsilon_tot="<<epsilon
   <<" | CPU-time:" << runtime << " | log_10(h)=" << log10(h) << " |\n";
 
   outfile << "| x | v | u |\n ";

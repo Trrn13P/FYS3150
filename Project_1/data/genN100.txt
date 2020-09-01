@@ -1,4 +1,4 @@
-| N=100 | epsilon_max= -1.69224 | epsilon_tot=-169.224 | CPU-time:1.2e-05 | log_10(h)=-2.0086 |
+| N=100 | epsilon_max=-1.69224 | epsilon_tot=-169.224 | CPU-time:1.2e-05 | log_10(h)=-2.0086 |
 | x | v | u |
  0 0 0
 0.00990099 0.0826521 0.0843657
