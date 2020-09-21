@@ -4,46 +4,38 @@
 #include "time.h"
 
 void eigenvalues::solve(double tolerance, int maxiter){
-//A.print();
-
 offdiag();
 Jacobi_rotate();
 int iterations = 1;
 while ( m_max > tolerance && iterations <= maxiter)
 {
-  //cout << "running..." << endl;
    offdiag();
    Jacobi_rotate();
    iterations++;
 }
-cout << iterations << endl;
-//R.print();
-//A.print();
 }
 
-//  the offdiag function, using Armadillo
+
 void eigenvalues::offdiag(){
+   double max;
    for (int i = 0; i < n; ++i)
    {
        for ( int j = i+1; j < n; ++j)
        {
            double aij = fabs(A(i,j));
-           //cout << aij << " " << m_max<< endl;
-           if ( aij > m_max)
+           if ( aij > max)
            {
-              m_max = aij;  p = i; q = j;
-
+              max = aij;  p = i; q = j;
            }
        }
    }
+   m_max = max;
    }
 
 void eigenvalues::Jacobi_rotate()
 {
-  //cout << p << q << endl;
   int k = p;
   int l = q;
-  //
 
   if ( A(k,l) != 0.0 ) {
     tau = (A(l,l) - A(k,k))/(2*A(k,l));
@@ -69,7 +61,7 @@ void eigenvalues::Jacobi_rotate()
   A(l,l) = s*s*a_kk + 2.0*c*s*A(k,l) + c*c*a_ll;
   A(k,l) = 0.0;  // hard-coding non-diagonal elements by hand
   A(l,k) = 0.0;  // same here
-  //A.print();
+
   for ( int i = 0; i < n; i++ ) {
     if ( i != k && i != l ) {
       a_ik = A(i,k);

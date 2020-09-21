@@ -5,7 +5,9 @@
 using namespace std;
 using namespace arma;
 
-void eigenvalues::solve(mat A, mat R , double maxiter, double tolerance){
+void eigenvalues::solve(mat A_, mat R_ , double maxiter, double tolerance){
+  A = A_;
+  R = R_;
 
   int p, q;
   double maxnondiag = offdiag(A, &p, &q, n);
@@ -13,12 +15,14 @@ void eigenvalues::solve(mat A, mat R , double maxiter, double tolerance){
   int iterations = 1;
   while ( maxnondiag > tolerance && iterations <= maxiter)
   {
+    //cout << "hey" << endl;
      int p, q;
      maxnondiag = offdiag(A, &p, &q, n);
-    Jacobi_rotate(A, R, p, q, n);
+     Jacobi_rotate(A, R, p, q, n);
      iterations++;
   }
   R.print();
+  A.print();
 }
 
 
@@ -39,7 +43,7 @@ double eigenvalues::offdiag(mat A, int *p, int *q, int n)
    return max;
 }
 
-void eigenvalues::Jacobi_rotate ( mat A, mat R, int k, int l, int n )
+void eigenvalues::Jacobi_rotate (int k, int l, int n )
 {
   double s, c;
   if ( A(k,l) != 0.0 ) {
