@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include "time.h"
+#define TRUE 1
+#define FALSE 0
 
 void eigenvalues::solve(double tolerance, int maxiter){
 offdiag();
@@ -13,6 +15,12 @@ while ( m_max > tolerance && iterations <= maxiter)
    Jacobi_rotate();
    iterations++;
 }
+/*
+cout << "A:\n";
+A.print();
+cout << "R:\n";
+R.print();
+*/
 }
 
 
@@ -77,6 +85,40 @@ void eigenvalues::Jacobi_rotate()
 
     R(i,k) = c*r_ik - s*r_il;
     R(i,l) = c*r_il + s*r_ik;
+  }
+  }
 
+
+void eigenvalues::order_eigenvalues(){
+  running = TRUE;
+  col_swap = TRUE;
+  while(running==TRUE){
+    for(int i=0;i<n-1;i++){
+      if(A(i+1,i+1)<A(i,i)){
+        float a_ip1ip1 = A(i+1,i+1);
+        float a_ii = A(i,i);
+        A(i,i) = a_ip1ip1;
+        A(i+1,i+1) = a_ii;
+        R.swap_cols(i+1,i);
+        col_swap = TRUE;
+      }
+      }
+    if(col_swap == FALSE){
+      running = FALSE;
+    }
+    col_swap = FALSE;
+    }
+}
+
+
+vec eigenvalues::get_eigenvectors(int n_){
+  vec v = zeros(n);
+  for(int i=0;i<n;i++){
+    v(i) = R(i,n_);
   }
-  }
+  return v;
+}
+
+float eigenvalues::get_eigenvalues(int n_){
+  return A(n_,n_);
+}

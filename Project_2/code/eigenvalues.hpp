@@ -6,13 +6,12 @@
 using namespace arma;
 
 class eigenvalues {
-
   private:
     int n;
+    int N;
     double m_max;
 
     int p, q;
-
 
     double s, c;
     double t, tau;
@@ -21,6 +20,9 @@ class eigenvalues {
 
     mat R;
     mat A;
+
+    bool running;
+    bool col_swap;
 
     void Initialize(mat A_, int n_){
       //Initialing stepsize, numbers ect.
@@ -33,8 +35,18 @@ class eigenvalues {
     }
       //overload function
       void Initialize(){
-        A = randn(4,4);
         n = 4;
+        A = zeros(n);
+        for(int i=0;i<n;i++){
+          if (i!=0){
+              A(i,i-1) = -1;
+            }
+          A(i,i) = 2;
+          if(i!=n-1){
+              A(i,i+1) = -1;
+            }
+          }
+
         std::cout << "Running on overload function\n" << std::endl;
         Initialize(A,n);
       }
@@ -44,6 +56,9 @@ class eigenvalues {
     void offdiag();
     void Jacobi_rotate();
     void solve(double tolerance,int maxiter);
+    vec get_eigenvectors(int n_);
+    float get_eigenvalues(int n_);
+    void order_eigenvalues();
 
 
     //setting up the overload
@@ -54,5 +69,4 @@ class eigenvalues {
       Initialize();
     }
 };
-
 #endif
