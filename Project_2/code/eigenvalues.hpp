@@ -46,7 +46,6 @@ class eigenvalues {
               A(i,i+1) = -1;
             }
           }
-
         std::cout << "Running on overload function\n" << std::endl;
         Initialize(A,n);
       }
@@ -56,10 +55,11 @@ class eigenvalues {
     void offdiag();
     void Jacobi_rotate();
     void solve(double tolerance,int maxiter);
+
     vec get_eigenvectors(int n_);
     float get_eigenvalues(int n_);
-    void order_eigenvalues();
 
+    void order_eigenvalues();
 
     //setting up the overload
     eigenvalues(mat A, int n_){

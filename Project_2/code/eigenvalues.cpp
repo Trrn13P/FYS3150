@@ -15,12 +15,6 @@ while ( m_max > tolerance && iterations <= maxiter)
    Jacobi_rotate();
    iterations++;
 }
-/*
-cout << "A:\n";
-A.print();
-cout << "R:\n";
-R.print();
-*/
 }
 
 
