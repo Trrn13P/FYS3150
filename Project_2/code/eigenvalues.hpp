@@ -2,7 +2,6 @@
 #define EIGENVALUES_HPP
 
 #include <armadillo>
-
 using namespace arma;
 
 class eigenvalues {
@@ -11,21 +10,20 @@ class eigenvalues {
     int N;
     double m_max;
 
+
     int p, q;
 
     double s, c;
     double t, tau;
     double a_kk, a_ll, a_ik, a_il, r_ik, r_il;
 
-
-    mat R;
-    mat A;
+    Mat<double> R;
+    Mat<double> A;
 
     bool running;
     bool col_swap;
 
     void Initialize(mat A_, int n_){
-      //Initialing stepsize, numbers ect.
       n = n_;
       A = A_;
       R = zeros(n,n);
@@ -52,6 +50,7 @@ class eigenvalues {
 
 
   public:
+    int iterations;
     void offdiag();
     void Jacobi_rotate();
     void solve(double tolerance,int maxiter);
@@ -60,6 +59,7 @@ class eigenvalues {
     float get_eigenvalues(int n_);
 
     void order_eigenvalues();
+    mat get_solution(int n_, float rho_0, float rho_N);
 
     //setting up the overload
     eigenvalues(mat A, int n_){
