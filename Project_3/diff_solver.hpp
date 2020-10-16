@@ -1,27 +1,32 @@
 #include <armadillo>
+#include "planet.h"
 
 using namespace arma;
 
 #ifndef DIFF_SOLVER_HPP
 #define DIFF_SOLVER_HPP
+#include "planet.h"
 
 class diff_solver {
 private:
-  //Inputs of init function
+  int total_planets;
+  //number of planets
   int n;
 
-  //Pointer to the diffEquation
-  mat (*diffEq)(int);
+
+  planet* planets[];
 
 
 
 public:
-  void calcSlope();
+  void addPlanet(planet newplanet);
+  mat diffEq(mat current_XV);
+  void calcSlope(mat current_XV);
   void step();
 
-  diff_solver(mat (*f)(int),int n_){
+  diff_solver(int n_){
+    total_planets = 0;
     n = n_;
-    diffEq = f;
   }
 
 };
