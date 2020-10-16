@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
   int len = end(planets)-begin(planets);
 
   float deltaT = 0.001;
-  int N = 5000;
+  int N = 10000;
   string filename = "./data/test.txt";
 
   solve(planets,len,deltaT,N,filename);
@@ -32,17 +32,12 @@ int main(int argc, char const *argv[]) {
 
 mat diffEq(mat current_XV, planet *planets[], int n){
   float Gconst = 4*M_PI*M_PI;
-
-  mat dydt = zeros(n,6);
-
+  mat new_XV = zeros(n,6);
   for(int i=0;i<n;i++){
-    for(int j=3;j<6;j++){
-      dydt(i,j) = current_XV(i,j);
+    for(int j=0;j<3;j++){
+      new_XV(i,j) = current_XV(i,j+3);
     }
-  }
-
-
-   //float Gconst = 6.67408*1E-11;
+}
 
   for(int i=0;i<n;i++){
     vec a_i = zeros(3);
@@ -51,35 +46,44 @@ mat diffEq(mat current_XV, planet *planets[], int n){
     vec r_ij = zeros(3); //unit length
 
     for(int k=0;k<3;k++){
-      r_i[k] = current_XV(i,k+3);
-    }
-
-    for(int j=0;j<n;j++){
-      for(int k=0;k<3;k++){
-        r_j[k] = current_XV(j,k+3);
+        r_i[k] = current_XV(i,k);
       }
+      for(int j=0;j<n;j++){
 
-      if(j!=i){
-        if(norm(r_j-r_i,2)==0){
-          r_ij = zeros(3);
-        }
-        else{
-          r_ij = (r_j-r_i)*.1/norm(r_j-r_i,2);
+        for(int k=0;k<3;k++){
+          r_j[k] = current_XV(j,k);
         }
 
-        a_i = -Gconst* planets[j]->mass * 1./pow(norm(r_j-r_i),2) * r_ij + a_i;
+        if(j!=i){
+          if(norm(r_j-r_i,2)==0){
+            r_ij = zeros(3);
+          }
+          else{
+            //cout << r_ij << endl;
+            r_ij = (r_j-r_i);
+            //cout << r_ij << endl;
+            //norm(r_j-r_i,2);
+            //cout << norm(r_j-r_i,2) << endl;
+          }
+        //cout << 1/pow(norm(r_j-r_i),3)<< endl;
+        a_i = Gconst * planets[j]->mass * 1/pow(norm(r_j-r_i),3) * r_ij + a_i;
+        //cout << a_i << endl;
       }
-    }
-    for(int k=0;k<3;k++){
-      dydt(i,k)=a_i(k);
-    }
+
   }
-  return dydt;
+
+  for(int k=0;k<3;k++){
+    new_XV(i,k+3)=a_i(k);
+  }
+}
+  //cout << new_XV << endl;
+  return new_XV;
 }
 
 mat calcSlope(mat current_XV, planet *planets[], int n,float deltaT){
   mat dydt = zeros(n,6);
   mat k1 = diffEq(current_XV, planets, n);
+  //cout << k1 << endl;
   //mat k2 = diffEq(current_XV + k1*deltaT*1./2, planets, n);
   //mat k3 = diffEq(current_XV+k2*deltaT*1./2, planets, n);
   //mat k4 = diffEq(current_XV+k3*deltaT, planets, n);
@@ -93,11 +97,11 @@ mat step(planet *planets[], int n,float deltaT){
   //Updating current position
   for(int i=0;i<n;i++){
     for(int j=0;j<3;j++){
-      current_XV(i,j) = planets[i]->velocity[j];
-      current_XV(i,j+3) = planets[i]->position[j];
+      current_XV(i,j) = planets[i]->position[j];
+      current_XV(i,j+3) = planets[i]->velocity[j];
+
       }
     }
-
   return current_XV + calcSlope(current_XV,planets,n,deltaT)*deltaT;
 }
 
@@ -112,8 +116,8 @@ void solve(planet *planets[], int n,float deltaT, int N,string filename){
   //Updating current position
   for(int i=0;i<n;i++){
     for(int j=0;j<3;j++){
-      current_XV(i,j) = planets[i]->velocity[j];
-      current_XV(i,j+3) = planets[i]->position[j];
+      current_XV(i,j) = planets[i]->position[j];
+      current_XV(i,j+3) = planets[i]->velocity[j];
       }
     }
 
@@ -121,18 +125,17 @@ void solve(planet *planets[], int n,float deltaT, int N,string filename){
 
 
   for(int i=0;i<N;i++){
-    mat new_VX = step(planets,n,deltaT);
+    mat new_XV = step(planets,n,deltaT);
     for(int i=0;i<n;i++){
       for(int j=0;j<3;j++){
-        planets[i]->velocity[j] = new_VX(i,j);
-        planets[i]->position[j] = new_VX(i,j+3);
+        planets[i]->position[j] = new_XV(i,j);
+        planets[i]->velocity[j] = new_XV(i,j+3);
       }
     }
-    outfile << new_VX << endl;
-    //cout << new_VX << endl;
-    cout << sqrt(planets[1]->velocity[0]*planets[1]->velocity[0]+
-    planets[1]->velocity[1]*planets[1]->velocity[1]+
-  planets[1]->velocity[2]*planets[1]->velocity[2]) << endl;
+    outfile << new_XV << endl;
+    //cout << new_XV << endl;
+
+    
   }
   outfile.close();
 
