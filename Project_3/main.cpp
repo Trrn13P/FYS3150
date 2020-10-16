@@ -7,7 +7,6 @@ using namespace std;
 using namespace arma;
 
 mat diffEq(mat current_XV, planet *planets[], int n);
-mat calcSlope(mat current_XV, planet *planets[], int n,float deltaT);
 mat step(planet *planets[], int n,float deltaT);
 void solve(planet *planets[], int n,float deltaT, int N,string filename);
 
@@ -74,15 +73,6 @@ mat diffEq(mat current_XV, planet *planets[], int n){
   return new_XV;
 }
 
-mat calcSlope(mat current_XV, planet *planets[], int n,float deltaT){
-  mat dydt = zeros(n,6);
-  mat k1 = diffEq(current_XV, planets, n);
-  mat k2 = diffEq(current_XV + k1*deltaT*1./2, planets, n);
-  mat k3 = diffEq(current_XV+k2*deltaT*1./2, planets, n);
-  mat k4 = diffEq(current_XV+k3*deltaT, planets, n);
-  dydt = (k1 + 2*k2 + 2*k3 + k4)/6;
-  return dydt;
-}
 
 mat step(planet *planets[], int n,float deltaT){
   mat current_XV = zeros(n,6);
@@ -94,7 +84,26 @@ mat step(planet *planets[], int n,float deltaT){
 
       }
     }
-  return current_XV + calcSlope(current_XV,planets,n,deltaT)*deltaT;
+
+  //Euler-Cromer
+  mat dydt = zeros(n,6);
+  mat next_XV = diffEq(current_XV, planets, n);
+  dydt = diffEq(next_XV,planets,n);
+
+
+
+
+  //RK4
+  /*
+  mat dydt = zeros(n,6);
+  mat k1 = diffEq(current_XV, planets, n);
+  mat k2 = diffEq(current_XV + k1*deltaT*1./2, planets, n);
+  mat k3 = diffEq(current_XV+k2*deltaT*1./2, planets, n);
+  mat k4 = diffEq(current_XV+k3*deltaT, planets, n);
+  dydt = (k1 + 2*k2 + 2*k3 + k4)/6;
+  */
+
+  return current_XV + dydt*deltaT;
 }
 
 void solve(planet *planets[], int n,float deltaT, int N,string filename){
